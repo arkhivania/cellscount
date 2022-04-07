@@ -6,6 +6,7 @@ from scipy import misc
 import imageio
 import random
 from skimage.transform import rescale, resize, downscale_local_mean
+from libtiff import TIFFfile, TIFFimage
 
 random.seed(0)
 
@@ -14,10 +15,18 @@ parser.add_argument('--input', type=str, required=True)
 parser.add_argument('--outputFolder', type=str, required=True)
 parser.add_argument('--tileSize', type=int, required=False, default=128)
 parser.add_argument('--netSize', type=int, required=False, default=128)
+parser.add_argument('--channel', type=int, required=True)
 
 args = parser.parse_args()
 
-source_image = imageio.imread(args.input)
+source_image = TIFFfile(args.input)
+samples, sample_names = source_image.get_samples()
+# for image in source_image.iter_images():
+source_image = samples[0][args.channel]
+
+
+
+# source_image = imageio.imread(args.input)
 for r in ["test", "train", "validate"]:
     folder = os.path.join(args.outputFolder, r)
     if not os.path.exists(folder):
@@ -39,8 +48,9 @@ for y in range(0, source_image.shape[0], tileSize):
                 else:
                     targetFolder = "test"
             targetFolder = os.path.join(args.outputFolder, targetFolder)
-            fname = "{}_{}_img.png".format(y, x)
-            maskName = "{}_{}_img_mask.png".format(y, x)
+            pref = "{}_{}_".format(os.path.basename(args.input), args.channel)
+            fname = "{}_{}_{}_img.png".format(pref, y, x)
+            maskName = "{}_{}_{}_img_mask.png".format(pref, y, x)
 
             if args.netSize != tileSize:
                 tileImg = resize(tileImg, 
