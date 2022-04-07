@@ -24,7 +24,9 @@ samples, sample_names = source_image.get_samples()
 # for image in source_image.iter_images():
 source_image = samples[0][args.channel]
 
-
+imageio.imwrite(os.path.join(args.outputFolder, 
+    "complete_{}".format(os.path.basename(args.input))), 
+    source_image)
 
 # source_image = imageio.imread(args.input)
 for r in ["test", "train", "validate"]:
