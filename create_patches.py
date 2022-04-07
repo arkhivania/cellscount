@@ -12,7 +12,7 @@ random.seed(0)
 parser = argparse.ArgumentParser(description='Prepare patch images')
 parser.add_argument('--input', type=str, required=True)
 parser.add_argument('--outputFolder', type=str, required=True)
-parser.add_argument('--tileSize', type=int, required=False, default=256)
+parser.add_argument('--tileSize', type=int, required=False, default=128)
 parser.add_argument('--netSize', type=int, required=False, default=128)
 
 args = parser.parse_args()
@@ -25,6 +25,7 @@ for r in ["test", "train", "validate"]:
 
 tileSize = args.tileSize
 for y in range(0, source_image.shape[0], tileSize):
+    print("{} from {} complete".format(y//tileSize, source_image.shape[0]//tileSize))
     for x in range(0, source_image.shape[1], tileSize):
         if (x + tileSize < source_image.shape[1]) and \
             (y + tileSize < source_image.shape[0]):
@@ -41,9 +42,10 @@ for y in range(0, source_image.shape[0], tileSize):
             fname = "{}_{}_img.png".format(y, x)
             maskName = "{}_{}_img_mask.png".format(y, x)
 
-            tileImg = resize(tileImg, 
-                (args.netSize, args.netSize), 
-                anti_aliasing=True, preserve_range=True)
+            if args.netSize != tileSize:
+                tileImg = resize(tileImg, 
+                    (args.netSize, args.netSize), 
+                    anti_aliasing=True, preserve_range=True, order=3).astype(np.uint8)
             
             mv = np.amax(tileImg)
             if mv > 0:
