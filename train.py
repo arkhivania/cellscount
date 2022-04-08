@@ -9,7 +9,7 @@ from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 
 
 
-parser = argparse.ArgumentParser(description='Prepare data for preprocessing')
+parser = argparse.ArgumentParser(description='Train model')
 parser.add_argument('--trainData', type=str, required=True)
 parser.add_argument('--outputModelFolder', type=str, required=True)
 

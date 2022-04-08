@@ -6,7 +6,7 @@ from scipy import misc
 import imageio
 import random
 from skimage.transform import rescale, resize, downscale_local_mean
-from libtiff import TIFFfile, TIFFimage
+from libtiff import TIFFfile
 
 random.seed(0)
 
