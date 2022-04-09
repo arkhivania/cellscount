@@ -40,6 +40,6 @@ for y in range(0, source_size[0], size[0]//2):
         res[y:max_y, x:max_x] = np.maximum(res[y:max_y, x:max_x], segmBatchResult[0, 0:ty, 0:tx, 0])
 
 color = np.stack((source,)*3, axis=-1)
-color[res > 0.5] = [0,255,0]
+color[res > 0.8] = [0,255,0]
 imageio.imwrite(args.output, color)        
 
