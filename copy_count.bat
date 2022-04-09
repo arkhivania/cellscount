@@ -1,0 +1,1 @@
+copy /Y result_source.tif result_count.tif
